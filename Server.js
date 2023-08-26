@@ -64,11 +64,22 @@ async function inserValue(value, tableName) {
 
 //Build HTTP
 const http = require("http");
+const app_exp = express();
+const path = require("path");
 
 const options = {
   key: fs.readFileSync("./certs/localhost.key"),
   cert: fs.readFileSync("./certs/localhost.crt"),
 };
+
+app_exp.use(express.static(path.join(__dirname, "build")));
+
+app_exp.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build/index.html"));
+});
+
+const server_exp = http.createServer(options, app_exp);
+server_exp.listen(4001, () => console.log("Client HTTP running on port 4001"));
 
 const server = http.createServer(options, app);
 
