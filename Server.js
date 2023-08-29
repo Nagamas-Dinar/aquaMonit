@@ -15,8 +15,8 @@ app.use(cors(corsOptions));
 
 //Web PORT
 const PORT = process.env.PORT || 3500;
-// const portName = "/dev/ttyUSB0";   //Raspi
-const portName = "COM5"; //PC
+const portName = "/dev/ttyUSB0";   //Raspi
+// const portName = "COM5"; //PC
 
 // console.log("Port name:", portName);
 const portOptions = {
@@ -32,7 +32,7 @@ parser.on("data", async (data) => {
   // console.log("Value Read: ", temp, typeof temp);
   const resTemp = await inserValue(temp, "log_temp");
   const resPpm = await inserValue(ppm, "log_ammonia");
-  console.log(`Added Value: ${resTemp}, ${resPpm}`);
+  console.log(`Added Value: ${resTemp}[C], ${resPpm}[ppm]`);
 });
 
 // Open errors will be emitted as an error event
@@ -51,7 +51,8 @@ app.get("/select/ammonia", (req, res) => {
 //insert function
 async function inserValue(value, tableName) {
   try {
-    if (typeof value === "number" && value !== NaN) {
+    if (typeof value === "number" && !Number.isNaN(value)) {
+      // console.log("Get Value",value);
       const query =
         "INSERT INTO " + tableName + " (value) values('" + value + "')";
       await getController.runQueryAsync(query);
