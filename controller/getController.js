@@ -80,24 +80,24 @@ async function deleteDataAPI(data, tablename, res) {
 
 function getDataTable(req, res, table) {
   switch (table.toLowerCase()) {
-    // case "temp":
-    //   getDataAPI(
-    //     "SELECT * FROM log_temp WHERE DATE(time)=CURDATE() ORDER BY time ASC",
-    //     res
-    //   );
-    //   break;
-    // case "ammonia":
-    //   getDataAPI("SELECT * FROM log_ammonia WHERE DATE(time)=CURDATE() ORDER BY time ASC", res);
-    //   break;
     case "temp":
       getDataAPI(
-        "SELECT * FROM log_temp ORDER BY time ASC",
+        "SELECT * FROM log_temp WHERE MONTH(time)=MONTH(CURDATE()) ORDER BY time ASC",
         res
       );
       break;
     case "ammonia":
-      getDataAPI("SELECT * FROM log_ammonia ORDER BY time ASC", res);
+      getDataAPI("SELECT * FROM log_ammonia WHERE MONTH(time) = MONTH(CURDATE()) ORDER BY time ASC", res);
       break;
+    // case "temp":
+    //   getDataAPI(
+    //     "SELECT * FROM log_temp ORDER BY time ASC",
+    //     res
+    //   );
+    //   break;
+    // case "ammonia":
+    //   getDataAPI("SELECT * FROM log_ammonia ORDER BY time ASC", res);
+    //   break;
     default:
       break;
   }
